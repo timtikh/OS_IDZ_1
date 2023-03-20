@@ -1,7 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
-int main() {
+char buffer[5000];
+
+int main(int argc, char **argv) {
     char string[100];
     printf("Введите строку: ");
     fgets(string, 100, stdin);

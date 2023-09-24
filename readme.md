@@ -12,8 +12,10 @@
 Код документирован комментариями на английском. Ниже вы найдете схемы по каждой из работ на оценку. Спасибо!
 
 ### Работа на 4 балла (папка for_4): ###
-
-
+![scheme - for 4](https://github.com/timtikh/OS_IDZ_1/assets/95489979/2f60f7c7-3aee-4061-bd9e-40b05ae8cf9d)
 ### Работа на 5 баллов (папка for_5): ###
+![scheme - for 5](https://github.com/timtikh/OS_IDZ_1/assets/95489979/2025645b-93d7-4e2a-85e9-41369c992a27)
 ### Работа на 6 баллов (папка for_6): ###
+![scheme - for 6](https://github.com/timtikh/OS_IDZ_1/assets/95489979/e29083fa-5aab-45eb-b402-48c1dd1ed213)
 ### Работа на 7 баллов (папка for_7): ###
+![scheme - for 7](https://github.com/timtikh/OS_IDZ_1/assets/95489979/8d3dd815-a6e2-44bf-a41f-626971e7264d)

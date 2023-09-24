@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         }
 
         printf("Copied data to buffer from input file\n");
-        printf("%s\n\n", buffer);
+        // printf("%s\n\n", buffer);
 
         exit(0);
     }

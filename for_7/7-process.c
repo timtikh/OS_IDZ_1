@@ -16,12 +16,10 @@
 int main(int argc, char *argv[])
 {
 
-    printf("\n\nStarting program for ASCII vowels converting for 5\n");
-    // Naming canals
-    const char *pipe_1 = "pipe1.fifo";
-    const char *pipe_2 = "pipe2.fifo";
+    printf("\n\nStarting program for ASCII vowels converting for 7\n");
+
     // Checking if arguments in terminal are enough for work - must be input and output file names
-    if (argc < 3)
+    if (argc != 3)
     {
         printf("Error: not enough arguments. Please, enter input and output file names\n");
         exit(1);
@@ -61,7 +59,7 @@ int main(int argc, char *argv[])
     int fd_first_write;
     int fd_second_read;
     int fd_second_write;
-    pid_t pid_first, pid_second, pid_third;
+    pid_t pid_first, pid_second;
     int status;
 
     // Starting ?son/daughter/child? processes
@@ -105,8 +103,35 @@ int main(int argc, char *argv[])
             exit(1);
         }
 
+        if ((fd_second_read = open(SECOND_FIFO, O_RDONLY)) == -1)
+        {
+            perror("open fifo_second_read");
+            exit(1);
+        }
+
+        // Читаем данные из второго канала
+        read_bytes = read(fd_second_read, buffer, BUF_SIZE);
+        if (read_bytes == -1)
+        {
+            perror("read");
+            exit(1);
+        }
+        buffer[read_bytes] = '\0';
+
+        if (close(fd_second_read) < 0)
+        {
+            perror("close fifo_second_read");
+            exit(1);
+        }
+
+        // Записываем полученные данные в выходной файл
+        if (write(out_fd, buffer, read_bytes) == -1)
+        {
+            perror("write");
+            exit(1);
+        }
         printf("Copied data to buffer from input file\n");
-        printf("%s\n\n", buffer);
+        // printf("%s\n\n", buffer);
 
         exit(0);
     }
@@ -185,48 +210,6 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    pid_third = fork();
-    if (pid_third == -1)
-    {
-        perror("fork");
-        exit(1);
-    }
-    else if (pid_third == 0)
-    {
-        // Writing data into output file
-        printf("Child process #3 with id: %d with parent id: %d\n", (int)getpid(), (int)getppid());
-
-        if ((fd_second_read = open(SECOND_FIFO, O_RDONLY)) == -1)
-        {
-            perror("open fifo_second_read");
-            exit(1);
-        }
-
-        // Reading second channel data
-        char buffer[BUF_SIZE];
-        ssize_t read_bytes = read(fd_second_read, buffer, BUF_SIZE);
-        if (read_bytes == -1)
-        {
-            perror("read");
-            exit(1);
-        }
-        buffer[read_bytes] = '\0';
-        if (close(fd_second_read) < 0)
-        {
-            perror("close fifo_second_read");
-            exit(1);
-        }
-
-        // writing outword in export file
-        if (write(out_fd, buffer, read_bytes) == -1)
-        {
-            perror("write");
-            exit(1);
-        }
-
-        exit(0);
-    }
-
     // Closing named chanels and finishing file work
     if (close(fd_first_read) < 0)
     {
@@ -258,6 +241,7 @@ int main(int argc, char *argv[])
         perror("close");
         exit(-1);
     }
+
     if (unlink(FIRST_FIFO) == -1)
     {
         perror("Error deleting named channel");
@@ -270,7 +254,6 @@ int main(int argc, char *argv[])
     }
     waitpid(pid_first, &status, 0);
     waitpid(pid_second, &status, 0);
-    waitpid(pid_third, &status, 0);
 
     exit(0);
 }
